@@ -6,9 +6,7 @@ import { useUnreadCount } from "./notifications";
 /** 4K-friendly dense content container used by every marketplace screen. */
 export function PageShell({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto w-full max-w-[1600px] space-y-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-6 2xl:max-w-[1840px]">
-      {children}
-    </div>
+    <div className="mx-auto w-full max-w-[1600px] 2xl:max-w-[1840px]">{children}</div>
   );
 }
 
@@ -28,6 +26,7 @@ export function SectionBanner({
   const unread = useUnreadCount();
 
   return (
+    <div className="px-4 pt-6 md:px-8">
     <section className="hero-surface relative overflow-hidden p-5 sm:p-7 lg:p-8">
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -left-10 h-64 w-64 rounded-full bg-accent-pink/30 blur-3xl" />
@@ -97,5 +96,6 @@ export function SectionBanner({
         </div>
       </div>
     </section>
+    </div>
   );
 }
