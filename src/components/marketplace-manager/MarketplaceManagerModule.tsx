@@ -3,6 +3,7 @@ import { AlertTriangle, Loader2, RotateCw } from "lucide-react";
 import { type SectionId } from "./TopBar";
 import { AppSidebar, useSidebarState } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
+import { PageShell, SectionBanner } from "./PageShell";
 import { DashboardSection } from "./sections/DashboardSection";
 import {
   HeroBannerSection, CategoriesSection, WallsSection, PlacementSection, CardsSection,
@@ -39,9 +40,12 @@ export function MarketplaceManagerModule() {
       <div className="flex min-w-0 flex-1 flex-col">
         <AppHeader active={section} onOpenMenu={() => setMobileOpen(true)} />
         <main className="flex-1">
-          <SectionBoundary sectionKey={section}>
-            {renderSection(section, navigate)}
-          </SectionBoundary>
+          <PageShell>
+            <SectionBanner active={section} onNavigate={navigate} />
+            <SectionBoundary sectionKey={section}>
+              {renderSection(section, navigate)}
+            </SectionBoundary>
+          </PageShell>
         </main>
       </div>
     </div>

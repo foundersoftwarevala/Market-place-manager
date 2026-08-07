@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Bell, Bot, Menu, Search, ChevronRight } from "lucide-react";
 import { AiChatPanel } from "./AiChatPanel";
 import { SECTIONS, type SectionId } from "./TopBar";
+import { markAllRead, useUnreadCount } from "./notifications";
 
 const ICON_BTN =
   "icon3d relative grid h-9 w-9 shrink-0 place-items-center rounded-xl text-muted-foreground " +
