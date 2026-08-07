@@ -1,6 +1,8 @@
 import { Component, Suspense, useEffect, useState, type ReactNode } from "react";
 import { AlertTriangle, Loader2, RotateCw } from "lucide-react";
-import { MarketplaceTopBar, type SectionId } from "./TopBar";
+import { type SectionId } from "./TopBar";
+import { AppSidebar, useSidebarState } from "./AppSidebar";
+import { AppHeader } from "./AppHeader";
 import { DashboardSection } from "./sections/DashboardSection";
 import {
   HeroBannerSection, CategoriesSection, WallsSection, PlacementSection, CardsSection,
@@ -22,15 +24,26 @@ import {
 export function MarketplaceManagerModule() {
   const [section, setSection] = useState<SectionId>("dashboard");
   const navigate = (id: SectionId) => setSection(id);
+  const { collapsed, toggleCollapsed, mobileOpen, setMobileOpen } = useSidebarState();
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <MarketplaceTopBar active={section} onChange={setSection} />
-      <main>
-        <SectionBoundary sectionKey={section}>
-          {renderSection(section, navigate)}
-        </SectionBoundary>
-      </main>
+    <div className="flex min-h-screen w-full bg-background text-foreground">
+      <AppSidebar
+        active={section}
+        onChange={setSection}
+        collapsed={collapsed}
+        onToggleCollapsed={toggleCollapsed}
+        mobileOpen={mobileOpen}
+        onCloseMobile={() => setMobileOpen(false)}
+      />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AppHeader active={section} onOpenMenu={() => setMobileOpen(true)} />
+        <main className="flex-1">
+          <SectionBoundary sectionKey={section}>
+            {renderSection(section, navigate)}
+          </SectionBoundary>
+        </main>
+      </div>
     </div>
   );
 }
