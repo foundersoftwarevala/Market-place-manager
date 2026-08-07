@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          badge: string
+          created_at: string
+          ends_at: string | null
+          gradient: string
+          icon_name: string
+          id: string
+          position: number
+          starts_at: string | null
+          text: string
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          badge?: string
+          created_at?: string
+          ends_at?: string | null
+          gradient?: string
+          icon_name?: string
+          id?: string
+          position?: number
+          starts_at?: string | null
+          text?: string
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          badge?: string
+          created_at?: string
+          ends_at?: string | null
+          gradient?: string
+          icon_name?: string
+          id?: string
+          position?: number
+          starts_at?: string | null
+          text?: string
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       auth_qr_sessions: {
         Row: {
           approved_email: string | null
@@ -71,6 +116,132 @@ export type Database = {
           demo_url_id?: string | null
           id?: string
           metadata?: Json
+        }
+        Relationships: []
+      }
+      feature_strip_items: {
+        Row: {
+          color_class: string
+          created_at: string
+          icon_name: string
+          id: string
+          label: string
+          position: number
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          color_class?: string
+          created_at?: string
+          icon_name?: string
+          id?: string
+          label: string
+          position?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          color_class?: string
+          created_at?: string
+          icon_name?: string
+          id?: string
+          label?: string
+          position?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      home_hero_slides: {
+        Row: {
+          accent: string
+          created_at: string
+          cta_link: string
+          cta_primary: string
+          cta_secondary: string
+          gradient: string
+          highlight: string
+          icon_name: string
+          id: string
+          kicker: string
+          position: number
+          published_at: string | null
+          slug: string
+          subtitle: string
+          title: string
+          unpublish_at: string | null
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          accent: string
+          created_at?: string
+          cta_link?: string
+          cta_primary: string
+          cta_secondary: string
+          gradient: string
+          highlight?: string
+          icon_name: string
+          id?: string
+          kicker: string
+          position?: number
+          published_at?: string | null
+          slug: string
+          subtitle: string
+          title: string
+          unpublish_at?: string | null
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          accent?: string
+          created_at?: string
+          cta_link?: string
+          cta_primary?: string
+          cta_secondary?: string
+          gradient?: string
+          highlight?: string
+          icon_name?: string
+          id?: string
+          kicker?: string
+          position?: number
+          published_at?: string | null
+          slug?: string
+          subtitle?: string
+          title?: string
+          unpublish_at?: string | null
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      homepage_sections: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          position: number
+          section_key: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          position?: number
+          section_key: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          position?: number
+          section_key?: string
+          updated_at?: string
+          visible?: boolean
         }
         Relationships: []
       }
@@ -414,6 +585,66 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      site_notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          is_published: boolean
+          kind: string
+          link_url: string | null
+          published_at: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          kind?: string
+          link_url?: string | null
+          published_at?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          kind?: string
+          link_url?: string | null
+          published_at?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }
