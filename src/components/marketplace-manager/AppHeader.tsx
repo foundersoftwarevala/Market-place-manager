@@ -45,11 +45,17 @@ export function AppHeader({
             <button className={ICON_BTN} aria-label="Search">
               <Search className="h-[18px] w-[18px]" />
             </button>
-            <button className={ICON_BTN} aria-label="Notifications">
+            <button
+              className={ICON_BTN}
+              aria-label={unread > 0 ? `Notifications (${unread} unread)` : "Notifications"}
+              onClick={markAllRead}
+            >
               <Bell className="h-[18px] w-[18px]" />
-              <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground ring-2 ring-background">
-                3
-              </span>
+              {unread > 0 && (
+                <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground ring-2 ring-background">
+                  {unread}
+                </span>
+              )}
             </button>
             <button
               onClick={() => setChatOpen(true)}
