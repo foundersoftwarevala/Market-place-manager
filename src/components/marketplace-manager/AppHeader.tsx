@@ -18,6 +18,7 @@ export function AppHeader({
   onOpenMenu: () => void;
 }) {
   const [chatOpen, setChatOpen] = useState(false);
+  const unread = useUnreadCount();
   const section = SECTIONS.find((s) => s.id === active);
 
   return (
