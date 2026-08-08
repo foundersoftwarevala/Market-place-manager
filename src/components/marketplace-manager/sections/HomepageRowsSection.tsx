@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { PageHeader, PillButton, SubNav, StatCard, Card, EmptyHint } from "../ui";
 import { TableToolbar, RowActions, BulkActionBar, ActionButton, ColorPicker } from "../actions";
+import { HomepageContentEditor } from "./HomepageContentEditor";
 
 type Row = {
   n: string; title: string; icon: any; status: "live" | "draft" | "hidden";
@@ -81,6 +82,8 @@ export function HomepageRowsSection() {
           </>
         }
       />
+
+      <HomepageContentEditor />
 
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Total Rows" value={String(ROWS.length)} />

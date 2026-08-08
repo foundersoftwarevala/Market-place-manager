@@ -4,7 +4,9 @@ import {
   Users2, Filter, Clock, Layout, Link2, Mail, Twitter, Facebook,
   Instagram, Youtube, Linkedin, Plus,
 } from "lucide-react";
-import { Card, EmptyHint, PageHeader, PillButton, SubNav } from "../ui";
+import { Card, EmptyHint, PageHeader, PillButton, SubNav, StatCard } from "../ui";
+import { CheckCheck, Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { useNotifications, markAllRead, markRead } from "../notifications";
 
 function Switch({ on = false }: { on?: boolean }) {
   const [v, setV] = useState(on);
@@ -273,8 +275,19 @@ export function UpcomingSection() {
   );
 }
 
-// ---------- NOTIFICATIONS MANAGER ----------
+// ---------- NOTIFICATIONS MANAGER (DB-backed) ----------
+const NOTIF_TONE = {
+  success: { cls: "text-success border-success/40 bg-success/10", Icon: CheckCircle2 },
+  warning: { cls: "text-warning border-warning/40 bg-warning/10", Icon: AlertTriangle },
+  info: { cls: "text-accent border-accent/40 bg-accent/10", Icon: Info },
+} as const;
+
 export function NotificationsSection() {
+  const items = useNotifications();
+  const [tab, setTab] = useState("All");
+  const unread = items.filter((n) => !n.read);
+  const list = tab === "Unread" ? unread : tab === "Read" ? items.filter((n) => n.read) : items;
+
   const channels = [
     ["In-App Bell", "Real-time updates inside the storefront"],
     ["Email", "Order, license, demo and offer mailers"],
@@ -283,9 +296,66 @@ export function NotificationsSection() {
     ["Web Push", "Browser push for offers and launches"],
     ["Telegram", "Channel broadcasts"],
   ] as const;
+
   return (
     <div className="px-4 py-8 md:px-8">
-      <PageHeader eyebrow="Notifications" title="Notification Channels" description="What the storefront can send and where it shows up." />
+      <PageHeader
+        eyebrow={`Notifications · ${unread.length} unread`}
+        title="Notification Center"
+        description="Live storefront notifications from the database. Read state syncs instantly with the header bell and the section banner."
+        actions={
+          <PillButton variant="primary" onClick={markAllRead}>
+            <span className="inline-flex items-center gap-1.5"><CheckCheck className="h-3.5 w-3.5" /> Mark all as read</span>
+          </PillButton>
+        }
+      />
+
+      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <StatCard label="Total" value={String(items.length)} />
+        <StatCard label="Unread" value={String(unread.length)} tone="warning" />
+        <StatCard label="Read" value={String(items.length - unread.length)} tone="success" />
+        <StatCard label="Channels" value={String(channels.length)} tone="premium" />
+      </div>
+
+      <SubNav items={["All", "Unread", "Read"]} active={tab} onChange={setTab} />
+
+      <div className="mb-8 space-y-2.5">
+        {list.length === 0 ? (
+          <EmptyHint text={tab === "Unread" ? "All caught up — no unread notifications." : "Nothing here yet."} />
+        ) : (
+          list.map((n) => {
+            const tone = NOTIF_TONE[n.tone];
+            const Icon = tone.Icon;
+            return (
+              <div key={n.id} className={`glass flex items-start gap-3 rounded-2xl p-3.5 ${n.read ? "opacity-60" : ""}`}>
+                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl border ${tone.cls}`}>
+                  <Icon className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="truncate text-[13px] font-bold">{n.title}</span>
+                    {!n.read && (
+                      <span className="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                        New
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{n.detail}</p>
+                </div>
+                {!n.read && (
+                  <button
+                    onClick={() => markRead(n.id)}
+                    className="inline-flex items-center gap-1 rounded-full border border-border bg-background/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                  >
+                    <CheckCheck className="h-3 w-3" /> Read
+                  </button>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {channels.map(([n, d]) => (
           <Card key={n}>

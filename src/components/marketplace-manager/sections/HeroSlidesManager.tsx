@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   Plus, Calendar, Eye, Edit3, Trash2, ChevronUp, ChevronDown, Save, X,
-  CheckCircle2, Clock, FileText, Archive, Power, Loader2, ArrowRight,
+  CheckCircle2, Clock, FileText, Archive, Power, Loader2, ArrowRight, CalendarClock,
 } from "lucide-react";
 import { Card, PageHeader, PillButton, StatCard, SubNav } from "../ui";
 import {
@@ -12,6 +12,7 @@ import {
   reorderHeroSlides, isSlideLive, iconFromName, HERO_ICON_CHOICES,
   type HeroSlideRow, type HeroStatus,
 } from "@/lib/hero-slides";
+import { HeroPreviewModal, HeroScheduleModal } from "./HeroPreviewSchedule";
 
 const STATUS_TABS = ["All", "Live", "Scheduled", "Drafts", "Archived"] as const;
 type Tab = (typeof STATUS_TABS)[number];
@@ -45,6 +46,8 @@ export function HeroBannerSection() {
   const [tab, setTab] = useState<Tab>("All");
   const [editing, setEditing] = useState<HeroSlideRow | null>(null);
   const [creating, setCreating] = useState(false);
+  const [previewing, setPreviewing] = useState<HeroSlideRow | null>(null);
+  const [scheduling, setScheduling] = useState<HeroSlideRow | null>(null);
 
   const { data: slides = [], isLoading } = useQuery({
     queryKey: ["hero_slides", "all"],
@@ -62,7 +65,7 @@ export function HeroBannerSection() {
   });
   const updateMut = useMutation({
     mutationFn: (v: { id: string; patch: Partial<HeroSlideRow> }) => updateHeroSlide(v.id, v.patch),
-    onSuccess: () => { invalidate(); toast.success("Slide updated"); setEditing(null); },
+    onSuccess: () => { invalidate(); toast.success("Slide updated"); setEditing(null); setScheduling(null); },
     onError: (e: Error) => toast.error(e.message),
   });
   const deleteMut = useMutation({
@@ -149,6 +152,8 @@ export function HeroBannerSection() {
               key={s.id}
               slide={s}
               onEdit={() => setEditing(s)}
+              onPreview={() => setPreviewing(s)}
+              onSchedule={() => setScheduling(s)}
               onDelete={() => { if (confirm(`Delete "${s.headline}"?`)) deleteMut.mutate(s.id); }}
               onMoveUp={i > 0 ? () => move(s.id, -1) : undefined}
               onMoveDown={i < filtered.length - 1 ? () => move(s.id, 1) : undefined}
@@ -159,6 +164,17 @@ export function HeroBannerSection() {
             />
           ))}
         </div>
+      )}
+
+      {previewing && <HeroPreviewModal slide={previewing} onClose={() => setPreviewing(null)} />}
+
+      {scheduling && (
+        <HeroScheduleModal
+          slide={scheduling}
+          busy={updateMut.isPending}
+          onClose={() => setScheduling(null)}
+          onSave={(patch) => updateMut.mutate({ id: scheduling.id, patch })}
+        />
       )}
 
       {(creating || editing) && (
@@ -188,9 +204,11 @@ function StatusPill({ s }: { s: HeroSlideRow }) {
 
 function SlideCard({
   slide, onEdit, onDelete, onMoveUp, onMoveDown, onPublish, onDraft, onArchive, onToggle,
+  onPreview, onSchedule,
 }: {
   slide: HeroSlideRow;
   onEdit: () => void; onDelete: () => void;
+  onPreview: () => void; onSchedule: () => void;
   onMoveUp?: () => void; onMoveDown?: () => void;
   onPublish: () => void; onDraft: () => void; onArchive: () => void; onToggle: () => void;
 }) {
@@ -227,6 +245,8 @@ function SlideCard({
           {slide.status !== "published" && <IconBtn title="Publish" onClick={onPublish}><CheckCircle2 className="h-3.5 w-3.5 text-success" /></IconBtn>}
           {slide.status !== "draft" && <IconBtn title="Move to draft" onClick={onDraft}><FileText className="h-3.5 w-3.5" /></IconBtn>}
           {slide.status !== "archived" && <IconBtn title="Archive" onClick={onArchive}><Archive className="h-3.5 w-3.5" /></IconBtn>}
+          <IconBtn title="Preview on storefront" onClick={onPreview}><Eye className="h-3.5 w-3.5 text-accent" /></IconBtn>
+          <IconBtn title="Schedule" onClick={onSchedule}><CalendarClock className="h-3.5 w-3.5 text-warning" /></IconBtn>
           <IconBtn title="Edit" onClick={onEdit}><Edit3 className="h-3.5 w-3.5" /></IconBtn>
           <IconBtn title="Delete" onClick={onDelete}><Trash2 className="h-3.5 w-3.5 text-destructive" /></IconBtn>
         </div>
