@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, PanelLeftClose, PanelLeftOpen, Search, X } from "lucide-react";
 import { SECTION_GROUPS, type SectionId } from "./TopBar";
+import { BrandLockup } from "./BrandMark";
 
 const COLLAPSE_KEY = "sv:mm:sidebar:collapsed";
 
@@ -110,12 +111,7 @@ export function AppSidebar({
           }}
           className="flex min-w-0 items-center gap-2"
         >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-primary-glow font-bold text-primary-foreground">
-            SV
-          </span>
-          {!collapsed && (
-            <span className="truncate text-sm font-semibold tracking-tight">Software Vala</span>
-          )}
+          <BrandLockup collapsed={collapsed} />
         </button>
         {!collapsed && (
           <button
