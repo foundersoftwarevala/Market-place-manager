@@ -62,67 +62,6 @@ export function DashboardSection({ onNavigate }: { onNavigate?: (id: NavId) => v
         }
       />
 
-      {/* Hero ribbon — frosted prism with aurora gradient + dot matrix overlay */}
-      <div
-        className="glow-primary relative mb-10 overflow-hidden rounded-[28px] border border-[oklch(1_0_0/0.10)] p-6 md:p-12"
-        style={{ background: "var(--gradient-hero)" }}
-      >
-        {/* dot matrix */}
-        <div className="dot-matrix pointer-events-none absolute inset-0 opacity-[0.18]" />
-        {/* aurora drift highlights */}
-        <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-accent/25 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-32 -right-24 h-80 w-80 rounded-full bg-premium/20 blur-[140px]" />
-        {/* top inner rim */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-
-        <div className="relative grid gap-8 md:grid-cols-[1.5fr_1fr] md:items-center">
-          <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[oklch(0.80_0.13_192/0.30)] bg-[oklch(0.80_0.13_192/0.10)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-accent">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent shadow-[0_0_8px_currentColor]" />
-              Slide 1 of 10 · Operator Console
-            </div>
-            <h2 className="text-[40px] font-bold leading-[1.05] tracking-tight md:text-[56px]">
-              Run the <span className="text-gradient">entire marketplace</span>
-              <br />
-              from one operator console.
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-              Manage 20 categories, 18 homepage walls, 20 banner slots, offers,
-              partners and approvals. Every dial hooked to live Software Vala
-              data — no mock numbers.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-2.5">
-              <PillButton variant="primary" onClick={() => go("homepage-rows")}>Open Homepage Manager</PillButton>
-              <PillButton variant="ghost" onClick={() => go("marketing")}>Launch Campaign</PillButton>
-              <PillButton variant="premium" onClick={() => go("analytics")}>Boost Revenue</PillButton>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { l: "Revenue Today", tone: "text-accent", bar: "bg-accent" },
-              { l: "Active Listings", tone: "text-success", bar: "bg-success" },
-              { l: "Pending Approvals", tone: "text-warning", bar: "bg-warning" },
-              { l: "Marketplace Score", tone: "text-premium", bar: "bg-premium" },
-            ].map((m) => (
-              <div
-                key={m.l}
-                className="group relative overflow-hidden rounded-2xl border border-[oklch(1_0_0/0.08)] bg-white/[0.04] p-4 backdrop-blur-xl ring-rim transition-all hover:border-[oklch(0.80_0.13_192/0.30)] hover:bg-white/[0.06]"
-              >
-                <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                  {m.l}
-                </div>
-                <div className={`mt-3 font-mono text-2xl font-bold tabular ${m.tone}`}>—</div>
-                <div className="mt-3 h-px w-full bg-border">
-                  <div className={`h-full w-1/3 ${m.bar} opacity-70`} />
-                </div>
-                <div className="mt-2 text-[10px] text-muted-foreground">Awaiting live data</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* KPI Zone */}
       <SectionRow title="Marketplace KPIs" cta="Open Analytics" onCta={() => go("analytics")}>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
