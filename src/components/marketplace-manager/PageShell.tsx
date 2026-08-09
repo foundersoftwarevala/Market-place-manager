@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { Activity, ArrowUpRight, BellRing, Sparkles } from "lucide-react";
 import { SECTIONS, type SectionId } from "./TopBar";
 import { useUnreadCount } from "./notifications";
+import { BrandMark } from "./BrandMark";
 
 /** 4K-friendly dense content container used by every marketplace screen. */
 export function PageShell({ children }: { children: ReactNode }) {
