@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { Activity, ArrowUpRight, BellRing, Sparkles } from "lucide-react";
 import { SECTIONS, type SectionId } from "./TopBar";
 import { useUnreadCount } from "./notifications";
+import { BrandMark } from "./BrandMark";
 
 /** 4K-friendly dense content container used by every marketplace screen. */
 export function PageShell({ children }: { children: ReactNode }) {
@@ -72,12 +73,10 @@ export function SectionBanner({
         <div className="w-full max-w-sm lg:justify-self-end">
           <div className="rounded-2xl border border-white/15 bg-black/25 p-5 backdrop-blur">
             <div className="flex items-center gap-3">
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-white/15 text-base font-bold">
-                SV
-              </span>
+              <BrandMark size={48} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">Marketplace Manager</p>
-                <p className="text-[11px] text-white/70">Enterprise control plane</p>
+                <p className="text-[11px] text-white/70">Software Vala · The Name of Trust</p>
               </div>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-2 text-center">

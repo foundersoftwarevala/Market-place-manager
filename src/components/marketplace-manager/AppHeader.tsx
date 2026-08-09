@@ -3,21 +3,26 @@ import { Bell, Bot, Menu, Search, ChevronRight } from "lucide-react";
 import { AiChatPanel } from "./AiChatPanel";
 import { SECTIONS, type SectionId } from "./TopBar";
 import { markAllRead, useUnreadCount } from "./notifications";
+import { BrandMark } from "./BrandMark";
+import { CommandPalette } from "./CommandPalette";
 
 const ICON_BTN =
   "icon3d relative grid h-9 w-9 shrink-0 place-items-center rounded-xl text-muted-foreground " +
   "transition-[transform,box-shadow,color,background-color] duration-200 " +
-  "hover:text-foreground active:scale-[0.96] focus-visible:outline-none " +
+  "hover:text-foreground hover:shadow-[0_8px_24px_-12px_oklch(0.62_0.19_255/0.9)] active:scale-[0.96] focus-visible:outline-none " +
   "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 export function AppHeader({
   active,
   onOpenMenu,
+  onNavigate,
 }: {
   active: SectionId;
   onOpenMenu: () => void;
+  onNavigate?: (id: SectionId) => void;
 }) {
   const [chatOpen, setChatOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const unread = useUnreadCount();
   const section = SECTIONS.find((s) => s.id === active);
 
@@ -42,17 +47,20 @@ export function AppHeader({
               <span className="h-1.5 w-1.5 rounded-full bg-accent-emerald" />
               Live
             </span>
-            <button className={ICON_BTN} aria-label="Search">
+            <button className={ICON_BTN} aria-label="Search modules" onClick={() => setSearchOpen(true)}>
               <Search className="h-[18px] w-[18px]" />
             </button>
             <button
               className={ICON_BTN}
               aria-label={unread > 0 ? `Notifications (${unread} unread)` : "Notifications"}
-              onClick={markAllRead}
+              onClick={() => {
+                markAllRead();
+                onNavigate?.("notifications" as SectionId);
+              }}
             >
               <Bell className="h-[18px] w-[18px]" />
               {unread > 0 && (
-                <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground ring-2 ring-background">
+                <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground shadow-[0_0_14px_oklch(0.62_0.19_255/0.9)] ring-2 ring-background">
                   {unread}
                 </span>
               )}
@@ -64,14 +72,17 @@ export function AppHeader({
               <Bot className="h-4 w-4" />
               <span className="hidden sm:inline">AI Chat</span>
             </button>
-            <span className="ml-1 grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary to-primary-glow text-xs font-bold text-primary-foreground">
-              B
-            </span>
+            <BrandMark size={36} className="ml-1" />
           </nav>
         </div>
       </header>
 
       <AiChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
+      <CommandPalette
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onNavigate={(id) => onNavigate?.(id)}
+      />
     </>
   );
 }

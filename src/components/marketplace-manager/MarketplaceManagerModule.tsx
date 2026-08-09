@@ -38,7 +38,7 @@ export function MarketplaceManagerModule() {
         onCloseMobile={() => setMobileOpen(false)}
       />
       <div className="flex min-w-0 flex-1 flex-col">
-        <AppHeader active={section} onOpenMenu={() => setMobileOpen(true)} />
+        <AppHeader active={section} onOpenMenu={() => setMobileOpen(true)} onNavigate={navigate} />
         <main className="flex-1">
           <PageShell>
             <SectionBanner active={section} onNavigate={navigate} />
