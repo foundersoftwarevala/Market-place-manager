@@ -12,7 +12,8 @@ import {
   reorderHeroSlides, isSlideLive, iconFromName, HERO_ICON_CHOICES,
   type HeroSlideRow, type HeroStatus,
 } from "@/lib/hero-slides";
-import { HeroPreviewModal, HeroScheduleModal } from "./HeroPreviewSchedule";
+import { HeroPreviewModal, HeroScheduleModal, HeroStorefrontFrame } from "./HeroPreviewSchedule";
+import { ShotStudioButton, ShotStudioModal } from "../ShotStudio";
 
 const STATUS_TABS = ["All", "Live", "Scheduled", "Drafts", "Archived"] as const;
 type Tab = (typeof STATUS_TABS)[number];
@@ -101,6 +102,8 @@ export function HeroBannerSection() {
     };
   }, [slides]);
 
+  const [shotOpen, setShotOpen] = useState(false);
+
   const move = (id: string, dir: -1 | 1) => {
     const ids = slides.map((s) => s.id);
     const idx = ids.indexOf(id);
@@ -126,6 +129,7 @@ export function HeroBannerSection() {
                 <span className="inline-flex items-center gap-1.5"><Eye className="h-3.5 w-3.5" /> Preview Home</span>
               </PillButton>
             </a>
+            <ShotStudioButton onClick={() => setShotOpen(true)} label="4K Storefront Shot" />
             <PillButton variant="primary" onClick={() => setCreating(true)}>
               <span className="inline-flex items-center gap-1.5"><Plus className="h-3.5 w-3.5" /> New Slide</span>
             </PillButton>
@@ -167,6 +171,30 @@ export function HeroBannerSection() {
       )}
 
       {previewing && <HeroPreviewModal slide={previewing} onClose={() => setPreviewing(null)} />}
+
+      <ShotStudioModal
+        open={shotOpen}
+        onClose={() => setShotOpen(false)}
+        title="Storefront 4K Preview & Export"
+        subtitle={`${slides.filter((s) => isSlideLive(s)).length} live hero slide(s)`}
+        fileName="storefront-hero"
+      >
+        {(dev) => (
+          <div className="bg-[oklch(0.12_0.03_262)] p-6" style={{ width: dev.width }}>
+            <div className="mb-5 flex items-center gap-3">
+              <span className="text-sm font-bold text-white">Software Vala · Storefront</span>
+              <span className="rounded-full border border-white/20 bg-white/10 px-2 py-0.5 text-[11px] text-white/80">
+                {dev.id} · {dev.width}px
+              </span>
+            </div>
+            <div className="space-y-5">
+              {(slides.filter((s) => isSlideLive(s)).length ? slides.filter((s) => isSlideLive(s)) : slides).slice(0, 6).map((s) => (
+                <HeroStorefrontFrame key={s.id} slide={s} compact={dev.id !== "desktop"} />
+              ))}
+            </div>
+          </div>
+        )}
+      </ShotStudioModal>
 
       {scheduling && (
         <HeroScheduleModal

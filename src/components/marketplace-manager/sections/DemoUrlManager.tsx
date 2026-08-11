@@ -21,6 +21,7 @@ import { listProductsAdmin } from "@/lib/marketplace.functions";
 import { Card, PageHeader, PillButton } from "../ui";
 import { BrandMark } from "../BrandMark";
 import { Tilt3D } from "../Tilt3D";
+import { ShotStudioButton, ShotStudioModal } from "../ShotStudio";
 
 const EMPTY: Partial<DemoUrl> = {
   demo_name: "", role_name: "User", url: "", username: "", password: "",
@@ -279,6 +280,7 @@ export function DemoUrlManagerSection() {
                 Test All
               </span>
             </PillButton>
+            <ShotStudioButton onClick={() => setShotOpen(true)} label="4K Report Shot" />
             <PillButton variant="primary" onClick={() => setEditing({ ...EMPTY })}>
               <span className="inline-flex items-center gap-1.5"><Plus className="h-3.5 w-3.5" /> New Demo URL</span>
             </PillButton>
