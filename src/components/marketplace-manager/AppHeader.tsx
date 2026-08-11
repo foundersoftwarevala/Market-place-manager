@@ -58,8 +58,17 @@ export function AppHeader({
               <span className="h-1.5 w-1.5 rounded-full bg-accent-emerald" />
               Live
             </span>
-            <button className={ICON_BTN} aria-label="Search modules" onClick={() => setSearchOpen(true)}>
+            <button
+              className={`${ICON_BTN} lg:h-9 lg:w-auto lg:gap-2 lg:px-2.5`}
+              aria-label="Search modules"
+              title="Search modules (⌘K)"
+              onClick={() => setSearchOpen(true)}
+            >
               <Search className="h-[18px] w-[18px]" />
+              <span className="hidden text-[11px] font-semibold lg:inline">Search</span>
+              <span className="hidden rounded-md border border-border bg-surface px-1.5 text-[10px] font-bold lg:inline">
+                ⌘K
+              </span>
             </button>
             <button
               className={ICON_BTN}
