@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, Bot, Menu, Search, ChevronRight } from "lucide-react";
 import { AiChatPanel } from "./AiChatPanel";
 import { SECTIONS, type SectionId } from "./TopBar";
