@@ -3,6 +3,7 @@ import { Activity, ArrowUpRight, BellRing, Sparkles } from "lucide-react";
 import { SECTIONS, type SectionId } from "./TopBar";
 import { useUnreadCount } from "./notifications";
 import { BrandMark } from "./BrandMark";
+import { Tilt3D } from "./Tilt3D";
 
 /** 4K-friendly dense content container used by every marketplace screen. */
 export function PageShell({ children }: { children: ReactNode }) {
@@ -71,6 +72,7 @@ export function SectionBanner({
         </div>
 
         <div className="w-full max-w-sm lg:justify-self-end">
+          <Tilt3D max={7}>
           <div className="rounded-2xl border border-white/15 bg-black/25 p-5 backdrop-blur">
             <div className="flex items-center gap-3">
               <BrandMark size={48} />
@@ -92,6 +94,7 @@ export function SectionBanner({
               ))}
             </div>
           </div>
+          </Tilt3D>
         </div>
       </div>
     </section>

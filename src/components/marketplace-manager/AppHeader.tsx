@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, Bot, Menu, Search, ChevronRight } from "lucide-react";
 import { AiChatPanel } from "./AiChatPanel";
 import { SECTIONS, type SectionId } from "./TopBar";
@@ -26,6 +26,17 @@ export function AppHeader({
   const unread = useUnreadCount();
   const section = SECTIONS.find((s) => s.id === active);
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((o) => !o);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
@@ -47,8 +58,17 @@ export function AppHeader({
               <span className="h-1.5 w-1.5 rounded-full bg-accent-emerald" />
               Live
             </span>
-            <button className={ICON_BTN} aria-label="Search modules" onClick={() => setSearchOpen(true)}>
+            <button
+              className={`${ICON_BTN} lg:h-9 lg:w-auto lg:gap-2 lg:px-2.5`}
+              aria-label="Search modules"
+              title="Search modules (⌘K)"
+              onClick={() => setSearchOpen(true)}
+            >
               <Search className="h-[18px] w-[18px]" />
+              <span className="hidden text-[11px] font-semibold lg:inline">Search</span>
+              <span className="hidden rounded-md border border-border bg-surface px-1.5 text-[10px] font-bold lg:inline">
+                ⌘K
+              </span>
             </button>
             <button
               className={ICON_BTN}

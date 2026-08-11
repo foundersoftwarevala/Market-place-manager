@@ -19,6 +19,8 @@ import {
 import { listProductsAdmin } from "@/lib/marketplace.functions";
 
 import { Card, PageHeader, PillButton } from "../ui";
+import { BrandMark } from "../BrandMark";
+import { Tilt3D } from "../Tilt3D";
 
 const EMPTY: Partial<DemoUrl> = {
   demo_name: "", role_name: "User", url: "", username: "", password: "",
@@ -259,7 +261,10 @@ export function DemoUrlManagerSection() {
         title="Demo URL Manager"
         description="Manage unlimited role-based demo environments per product. Test URLs live, track uptime, response time and SSL status."
         actions={
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
+              <BrandMark size={20} glow={false} /> Software Vala
+            </span>
             <PillButton variant="ghost" onClick={() => refetch()}>
               <span className="inline-flex items-center gap-1.5">
                 <RotateCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`} /> Refresh
@@ -830,12 +835,14 @@ function Stat({ label, value, tone, icon }: { label: string; value: number | str
     tone === "danger"  ? "text-rose-300" :
     tone === "accent"  ? "text-accent" : "text-foreground";
   return (
-    <div className="glass rounded-xl p-3">
-      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-        {icon}{label}
+    <Tilt3D max={9}>
+      <div className="glass rounded-xl p-3">
+        <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+          {icon}{label}
+        </div>
+        <div className={`mt-1 text-xl font-bold ${color}`}>{value}</div>
       </div>
-      <div className={`mt-1 text-xl font-bold ${color}`}>{value}</div>
-    </div>
+    </Tilt3D>
   );
 }
 function EnvChip({ env }: { env: DemoUrl["environment"] }) {

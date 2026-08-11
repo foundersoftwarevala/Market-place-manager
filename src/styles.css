@@ -1141,3 +1141,75 @@
   .shimmer-sweep::after { transition: none !important; }
   .skeleton-shimmer::after { animation: none !important; }
 }
+
+/* ─────────────── 3D tilt / parallax depth ─────────────── */
+@utility tilt3d {
+  --tx: 0deg;
+  --ty: 0deg;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+@utility tilt3d__inner {
+  position: relative;
+  height: 100%;
+  transform: rotateY(var(--tx)) rotateX(var(--ty));
+  transform-style: preserve-3d;
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 320ms ease, filter 320ms ease;
+  will-change: transform;
+  backface-visibility: hidden;
+  border-radius: var(--radius-xl);
+}
+
+@utility tilt3d--glow {
+  &[data-tilting="true"] .tilt3d__inner {
+    filter: saturate(1.1) brightness(1.04);
+    box-shadow:
+      0 26px 60px -26px oklch(0 0 0 / 0.75),
+      0 0 34px -12px color-mix(in oklab, var(--color-primary) 80%, transparent);
+  }
+  &[data-tilting="true"] .tilt3d__inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      280px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--color-primary) 26%, transparent),
+      transparent 65%
+    );
+    mix-blend-mode: screen;
+  }
+}
+
+/* ─────────────── Crisp 4K render mode + colour density ─────────────── */
+:root {
+  --primary: oklch(0.78 0.155 255);
+  --primary-glow: oklch(0.86 0.145 250);
+  --accent: oklch(0.85 0.135 250);
+  --ring: oklch(0.80 0.16 255);
+  --border: oklch(0.80 0.14 255 / 20%);
+  --input: oklch(0.80 0.14 255 / 22%);
+  --success: oklch(0.80 0.18 158);
+  --warning: oklch(0.85 0.17 85);
+  --info: oklch(0.78 0.16 240);
+  --shadow-card: 0 1px 0 oklch(0.88 0.13 255 / 12%) inset, 0 16px 40px -16px oklch(0 0 0 / 72%);
+  --shadow-elevated: 0 1px 0 oklch(0.88 0.13 255 / 14%) inset, 0 30px 66px -22px oklch(0 0 0 / 80%);
+}
+
+html {
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 0 0 0.35px color-mix(in oklab, currentColor 30%, transparent);
+}
+
+img,
+svg {
+  image-rendering: -webkit-optimize-contrast;
+}
