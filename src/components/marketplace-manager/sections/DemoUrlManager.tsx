@@ -21,6 +21,7 @@ import { listProductsAdmin } from "@/lib/marketplace.functions";
 import { Card, PageHeader, PillButton } from "../ui";
 import { BrandMark } from "../BrandMark";
 import { Tilt3D } from "../Tilt3D";
+import { ShotStudioButton, ShotStudioModal } from "../ShotStudio";
 
 const EMPTY: Partial<DemoUrl> = {
   demo_name: "", role_name: "User", url: "", username: "", password: "",
@@ -245,6 +246,8 @@ export function DemoUrlManagerSection() {
     toast.success(`Exported ${filtered.length} row(s)`);
   }
 
+  const [shotOpen, setShotOpen] = useState(false);
+
   const auditActions = useMemo(
     () => [...new Set(audit.map((a) => a.action))].sort(),
     [audit],
@@ -279,6 +282,7 @@ export function DemoUrlManagerSection() {
                 Test All
               </span>
             </PillButton>
+            <ShotStudioButton onClick={() => setShotOpen(true)} label="4K Report Shot" />
             <PillButton variant="primary" onClick={() => setEditing({ ...EMPTY })}>
               <span className="inline-flex items-center gap-1.5"><Plus className="h-3.5 w-3.5" /> New Demo URL</span>
             </PillButton>
@@ -594,6 +598,75 @@ export function DemoUrlManagerSection() {
           )}
         </Card>
       </div>
+      <ShotStudioModal
+        open={shotOpen}
+        onClose={() => setShotOpen(false)}
+        title="Demo Health 4K Report"
+        subtitle={`${stats.t} demo environment(s) · health ${stats.health == null ? "—" : stats.health + "%"}`}
+        fileName="demo-health-report"
+      >
+        {(dev) => (
+          <div className="bg-[oklch(0.12_0.03_262)] p-8" style={{ width: dev.width }}>
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/60">
+                  Software Vala · Demo URL Manager
+                </p>
+                <p className="mt-1 text-2xl font-bold text-white">Live Demo Health Report</p>
+              </div>
+              <p className="text-[11px] text-white/60">{new Date().toLocaleString()}</p>
+            </div>
+
+            <div className="mb-6 grid grid-cols-3 gap-3">
+              {([
+                ["Total", String(stats.t)],
+                ["Active", String(stats.active)],
+                ["Working", String(stats.working)],
+                ["Slow", String(stats.slow)],
+                ["Offline", String(stats.offline)],
+                ["SSL Valid", String(stats.ssl)],
+                ["Health", stats.health == null ? "—" : `${stats.health}%`],
+                ["Avg Response", stats.avgMs == null ? "—" : `${stats.avgMs} ms`],
+                ["Last Check", stats.lastChecked ? new Date(stats.lastChecked).toLocaleTimeString() : "—"],
+              ] as const).map(([l, v]) => (
+                <div key={l} className="rounded-xl border border-white/12 bg-white/[0.06] p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-white/55">{l}</p>
+                  <p className="mt-1 text-xl font-bold text-white">{v}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="overflow-hidden rounded-xl border border-white/12">
+              <table className="w-full text-left text-[12px] text-white/85">
+                <thead className="bg-white/[0.07] text-[10px] uppercase tracking-wider text-white/55">
+                  <tr>
+                    <th className="px-3 py-2">Demo</th>
+                    <th className="px-3 py-2">Environment</th>
+                    <th className="px-3 py-2">Status</th>
+                    <th className="px-3 py-2">Health</th>
+                    <th className="px-3 py-2">Response</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.slice(0, 18).map((r) => (
+                    <tr key={r.id} className="border-t border-white/8">
+                      <td className="px-3 py-2">
+                        <span className="font-semibold text-white">{r.demo_name || r.url}</span>
+                        <span className="ml-2 text-white/45">{r.url}</span>
+                      </td>
+                      <td className="px-3 py-2 capitalize">{r.environment}</td>
+                      <td className="px-3 py-2 capitalize">{r.status}</td>
+                      <td className="px-3 py-2 capitalize">{r.last_result ?? "untested"}</td>
+                      <td className="px-3 py-2">{r.last_response_ms == null ? "—" : `${r.last_response_ms} ms`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </ShotStudioModal>
+
 
       {editing && (
         <DemoEditor
