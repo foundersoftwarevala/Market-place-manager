@@ -651,12 +651,12 @@ export function DemoUrlManagerSection() {
                   {filtered.slice(0, 18).map((r) => (
                     <tr key={r.id} className="border-t border-white/8">
                       <td className="px-3 py-2">
-                        <span className="font-semibold text-white">{r.label || r.url}</span>
+                        <span className="font-semibold text-white">{r.demo_name || r.url}</span>
                         <span className="ml-2 text-white/45">{r.url}</span>
                       </td>
                       <td className="px-3 py-2 capitalize">{r.environment}</td>
                       <td className="px-3 py-2 capitalize">{r.status}</td>
-                      <td className="px-3 py-2 capitalize">{r.last_test_result ?? "untested"}</td>
+                      <td className="px-3 py-2 capitalize">{r.last_result ?? "untested"}</td>
                       <td className="px-3 py-2">{r.last_response_ms == null ? "—" : `${r.last_response_ms} ms`}</td>
                     </tr>
                   ))}
