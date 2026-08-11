@@ -32,7 +32,7 @@ export async function captureNode(
     pixelRatio,
     cacheBust: true,
     backgroundColor: opts.background ?? "#0b1020",
-    skipFonts: false,
+    skipFonts: true,
   };
   return format === "jpeg" ? toJpeg(node, { ...config, quality: 0.96 }) : toPng(node, config);
 }
